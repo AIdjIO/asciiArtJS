@@ -4,6 +4,10 @@ const ctx = canvas.getContext('2d');
 const image1 =  new Image();
 image1.src = 'mario.jpg';
 
+const inputSlider = document.getElementById('resolution');
+const inputLabel = document.getElementById('resolutionLabel');
+inputSlider.addEventListener('change', handleSlider)
+
 class Cell {
     constructor (x, y, symbol, color){
         this.x = x;
@@ -32,19 +36,19 @@ class AsciiEffect {
         this.#pixels = this.#ctx.getImageData(0,0,this.#width, this.#height);
     }
     #convertToSymbol(val){
-        if (val >250) return '@';
-        else if (val < 240) return '*';
-        else if (val < 220) return '+';
-        else if (val < 200) return '#';
-        else if (val < 180) return '&';
-        else if (val < 160) return '%';
-        else if (val < 140) return '_';
-        else if (val < 120) return ':';
-        else if (val < 100) return '$';
-        else if (val < 80) return '/';
-        else if (val < 60) return '-';
-        else if (val < 40) return 'X';
-        else if (val < 20) return 'W';
+        if (val > 250) return '@';
+        else if (val > 240) return '*';
+        else if (val > 220) return '+';
+        else if (val > 200) return '#';
+        else if (val > 180) return '&';
+        else if (val > 160) return '%';
+        else if (val > 140) return '_';
+        else if (val > 120) return ':';
+        else if (val > 100) return '$';
+        else if (val > 80) return '/';
+        else if (val > 60) return '-';
+        else if (val > 40) return 'X';
+        else if (val > 20) return 'W';
         else return '';
 
     }
@@ -81,10 +85,19 @@ class AsciiEffect {
 }
 
 let effect;
+
+function handleSlider(){
+    if (inputSlider.value == 1){
+        inputLabel.innerHTML = 'Original Image';
+        ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+    } else {
+        inputLabel.innerHTML = 'Resolution: ' + inputSlider.value + ' px';
+        effect.draw(parseInt(inputSlider.value));
+    }
+}
 image1.onload = function initialize(){
     canvas.width = image1.width;
     canvas.height = image1.height;
     effect = new AsciiEffect(ctx, image1.width, image1.height)
-    console.log(effect);
-    effect.draw(10)
+    handleSlider();
 }
